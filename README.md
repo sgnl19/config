@@ -31,10 +31,10 @@ Resources
 ---------
 
 The Lousson packages are available through the PEAR channel at
-http://lousson.github.com - thus, one can use the "pear" script to
+http://pear.lousson.org - thus, one can use the "pear" script to
 install any of them, e.g.:
 
-	pear channel-discover lousson.github.com
+	pear channel-discover pear.lousson.org
 	pear install lousson/config
 
 The complete sourcecode and version history is avialabe at GitHub.
