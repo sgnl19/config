@@ -60,7 +60,7 @@ class GenericConfigTest extends AbstractConfigTest
      *  Obtain the config to test
      *
      *  The getConfig() method will return the instance of the
-     *  Lousson\Config\AnyConfig interface that is to be tested.
+     *  Lousson\Config\Builtin\GenericConfig class.
      *  This instance will be pre-set with the options specified
      *  by the associative $options array.
      *

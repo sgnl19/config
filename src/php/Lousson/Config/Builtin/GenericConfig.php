@@ -91,9 +91,9 @@ class GenericConfig implements AnyConfig
      *  The getOption() method will return the value associated with the
      *  option identified by the given $name. If there is no such option,
      *  it will return the value of the given $fallback - but only in case
-     *  a fallback has been provided (see the func_num_args() function).
+     *  a fallback has been provided.
      *  If neither is available, the getOption() method will raise a
-     *  Lousson\Config\AnyConfigException.
+     *  Lousson\Config\AnyConfigException class.
      *
      *  @param  string  $name
      *  @param  mixed   $fallback
@@ -101,6 +101,10 @@ class GenericConfig implements AnyConfig
      *  @return mixed
      *
      *  @throws Lousson\Config\AnyConfigException
+     *          Raised in case of any error
+     *
+     *  @link http://php.net/manual/en/function.func-num-args.php
+     *  @link http://php.net/manual/en/language.functions.php
      */
     public function getOption($name, $fallback = null)
     {
@@ -121,9 +125,9 @@ class GenericConfig implements AnyConfig
     /**
      *  Check whether a particular option is set
      *
-     *  The hasOption() method shall return TRUE in case a subsequent call
+     *  The hasOption() method will return TRUE in case a subsequent call
      *  to getOption() would succeed, when the same $name but no $fallback
-     *  is provided.
+     *  is provided. FALSE will be returned otherwise.
      *
      *  @param  string  $name
      *

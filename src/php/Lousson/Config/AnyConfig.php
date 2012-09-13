@@ -71,6 +71,10 @@ interface AnyConfig
      *  @return mixed
      *
      *  @throws Lousson\Config\AnyConfigException
+     *          Raised in case of any error
+     *
+     *  @link http://php.net/manual/en/function.func-num-args.php
+     *  @link http://php.net/manual/en/language.functions.php
      */
     public function getOption($name, $fallback = null);
 
@@ -79,7 +83,7 @@ interface AnyConfig
      *
      *  The hasOption() method shall return TRUE in case a subsequent call
      *  to getOption() would succeed, when the same $name but no $fallback
-     *  is provided.
+     *  is provided. FALSE shall be returned otherwise.
      *
      *  @param  string  $name
      *
