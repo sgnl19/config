@@ -72,6 +72,12 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     abstract function getConfig(array $options);
 
     /** 
+     *  Obtain key/value pairs for testing
+     *
+     *  The getTestData() method returns an associative array of key/value
+     *  pairs of different types. This is used e.g. within data providers,
+     *  to pre-set configuration options to test.
+     *
      *  @return array
      */
     public function getTestData()
@@ -84,6 +90,15 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Provide configuration objects to test
+     *
+     *  The provideTestConfig() method is a data-provider that will return
+     *  an array of zero or more items, each of whose is an array itself.
+     *  The "inner" arrays' first item is an instance of the configuration
+     *  class to test, whilst the latter item is an associative array of
+     *  key/value pairs representing the configuration directives stored
+     *  in the object.
+     *
      *  @return array
      */
     public function provideTestConfig()
@@ -95,6 +110,16 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Provide configuration data to test
+     *
+     *  The provideTestData() method is a data-provider that will
+     *  return an array of zero or more items, each of whose will be an
+     *  array itself.
+     *  The "inner" arrays' first item is meant as a key or configuration
+     *  directive, whilst the latter is meant as the associated value.
+     *  This is used to e.g. test setters of configuration implementations,
+     *  if any.
+     *
      *  @return array
      */
     public function provideTestData()
@@ -110,6 +135,16 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Provide configuration parameter to test
+     *
+     *  The provideTestParameter() method is a data-provider that will
+     *  return an array of zero or more items, each of whose will be an
+     *  array itself.
+     *  The "inner" arrays' first item is the configuration object to be
+     *  tested, the second is a key and the third a value. Those key/value
+     *  pairs are assumed to exist as directive within the configuration
+     *  instance.
+     *
      *  @return array
      */
     public function provideTestParameter()
@@ -131,6 +166,12 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Test getOption() with expected key/value pairs
+     *
+     *  The testGetExpected() method tests whether the $config's
+     *  getOption() method returns the expected $value when invoked
+     *  for the given $key.
+     *
      *  @param  Lousson\Config\AnyConfig    $config
      *  @param  string                      $key
      *  @param  mixed                       $value
@@ -152,6 +193,13 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Test hasOption() with expected key/value pairs
+     *
+     *  The testHasExpected() method tests whether the $config's
+     *  hasOption() method returns TRUE for the given $key and,
+     *  furthermore, whether a subsequent call to getOption() really
+     *  returns the expected $value.
+     *  
      *  @param  Lousson\Config\AnyConfig    $config
      *  @param  string                      $key
      *  @param  mixed                       $value
@@ -259,6 +307,20 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *  Test getOption() with fallback values
+     *
+     *  The testFallback() method tests whether the given $config's
+     *  getOption() method returns a generic fallback value when neither
+     *  of the given $values is used.
+     *
+     *  @param  Lousson\Config\AnyConfig    $config
+     *  @param  array                       $values
+     *  @param  string                      $token
+     *
+     *  @throws PHPUnit_Framework_AssertionFailedError
+     *          Raised in case getOption() does not return the generic
+     *          fallback value
+     *
      *  @dataProvider       provideTestConfig
      *  @test
      */
