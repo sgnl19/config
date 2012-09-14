@@ -19,15 +19,15 @@
   </description>
 
   <lead>
-    <name>Attila Levai</name>
-    <user>sgnl19</user>
-    <email>alevai at quirkies.org</email>
-    <active>yes</active>
-  </lead>
-  <developer>
     <name>Mathias J. Hennig</name>
     <user>mjhennig</user>
     <email>mhennig at quirkies.org</email>
+    <active>yes</active>
+  </lead>
+  <developer>
+    <name>Attila Levai</name>
+    <user>sgnl19</user>
+    <email>alevai at quirkies.org</email>
     <active>yes</active>
   </developer>
 
