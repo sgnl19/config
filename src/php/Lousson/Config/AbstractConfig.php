@@ -30,10 +30,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config\Builtin;
+namespace Lousson\Config;
 
 /**
- *  Definition of the Lousson\Config\Builtin\CallbackConfig class
+ *  Definition of the Lousson\Config\AbstractConfig class
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -42,78 +42,42 @@ namespace Lousson\Config\Builtin;
  *  @filesource
  */
 /** Dependencies: */
-use Lousson\Config\AbstractConfig;
+use Lousson\Config\AnyConfig;
+use Lousson\Config\AnyConfigException;
 
 /**
- *  A Closure-based implementation of the AnyConfig interface
+ *  An abstract implementation of the AnyConfig interface
  *
- *  The Lousson\Config\Builtin\CallbackConfig class is a flexible
- *  implementation of the Lousson\Config\AnyConfig interface that
- *  uses a user-defined Closure to retrieve configuration values.
+ *  The Lousson\Config\AbstractConfig class may get used as base class for
+ *  implementations of the Lousson\Config\AnyConfig interface. It attempts
+ *  to fulfill the interface as far as possible, without assuming too much
+ *  implementation details.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
  */
-class CallbackConfig extends AbstractConfig
+abstract class AbstractConfig implements AnyConfig
 {
-    // The tag below is necessary due to a bug in PHP_CodeCoverage that
-    // causes Closures to confuse the whole processing logic. Nevertheless,
-    // the Lousson\Config\Builtin\CallbackConfigTest class does in fact
-    // use the constructor - otherwise, all the tests would fail anyway.
-    // @codeCoverageIgnoreStart
-
     /**
-     *  Constructor
+     *  Check whether a particular option is set
      *
-     *  The constructor allows to pass a Closure $getter that is used to
-     *  retrieve configuration values. This callback must provide the exact
-     *  same interface as AnyConfig::getOption().
-     *
-     *  @param  Closure $getter
-     */
-    public function __construct(\Closure $getter)
-    {
-        $this->_getter = $getter;
-    }
-
-    // @codeCoverageIgnoreEnd
-
-    /**
-     *  Get the value of a particular option
-     *
-     *  The getOption() method will return the value associated with the
-     *  option identified by the given $name. If there is no such option,
-     *  it will return the value of the given $fallback - but only in case
-     *  a fallback has been provided.
-     *  If neither is available, the getOption() method will raise a
-     *  Lousson\Config\AnyConfigException class.
+     *  The hasOption() method will return TRUE in case a subsequent call
+     *  to getOption() would succeed, when the same $name but no $fallback
+     *  is provided. FALSE will be returned otherwise.
      *
      *  @param  string  $name
-     *  @param  mixed   $fallback
      *
-     *  @return mixed
-     *
-     *  @throws Lousson\Config\AnyConfigException
-     *          Raised in case of any error
-     *
-     *  @link http://php.net/manual/en/function.func-num-args.php
-     *  @link http://php.net/manual/en/language.functions.php
+     *  @return boolean
      */
-    public function getOption($name, $fallback = null)
+    public function hasOption($name)
     {
-        $getter = $this->_getter;
-        $result = 1 === func_num_args()
-            ? $getter($name)
-            : $getter($name, $fallback);
-
-        return $result;
+        try {
+            $this->getOption($name);
+            return true;
+        }
+        catch (AnyConfigException $error) {
+            return false;
+        }
     }
-
-    /**
-     *  The configuration getter callback
-     *
-     *  @var array
-     */
-    private $_getter;
 }
 
