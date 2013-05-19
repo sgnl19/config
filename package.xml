@@ -66,6 +66,11 @@ ${contents}
         <min>3.0.0</min>
         <max>3.999.9999</max>
       </package>
+      <package>
+        <name>sniffs</name>
+        <channel>pear.lousson.org</channel>
+        <min>0.2.0</min>
+      </package>
     </required>
   </dependencies>
 
