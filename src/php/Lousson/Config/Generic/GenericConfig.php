@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Builtin\CallbackConfigTest class definition
+ *  Lousson\Config\Generic\GenericConfig class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -40,104 +40,89 @@
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config\Builtin;
+namespace Lousson\Config\Generic;
 
 /** Dependencies: */
-use Lousson\Config\AbstractConfigTest;
-use Lousson\Config\Builtin\CallbackConfig;
-use Lousson\Config\Error\InvalidConfigError;
+use Lousson\Config\AnyConfigException;
+use Lousson\Config\AbstractConfig;
+use Lousson\Config\Error\RuntimeConfigError;
+use Closure;
 use Exception;
 
 /**
- *  Test case for the CallbackConfig implementation
+ *  A Closure-based implementation of the AnyConfig interface
  *
- *  The CallbackConfigTest is a test case for the CallbackConfig class,
- *  implemented on top of the AbstractConfigTes.
+ *  The GenericConfig class is a flexible implementation of the AnyConfig
+ *  interface, using a Closure to retrieve configuration values.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
  */
-class CallbackConfigTest extends AbstractConfigTest
+class GenericConfig extends AbstractConfig
 {
     /**
-     *  Obtain the config to test
+     *  Create a config instance
      *
-     *  The getConfig() method returns the instance of the AnyConfig
-     *  interface that is to be tested. It will be pre-set with the given
-     *  $options.
+     *  The constructor allows to pass a Closure $getter that is used to
+     *  retrieve configuration values. This callback must provide the exact
+     *  same interface as the getOption() method, otherwise the behavior
+     *  is undefined.
      *
-     *  @param  array   $options    The options to apply
-     *
-     *  @return \Lousson\Config\AnyConfig
-     *          A config instance is returned on success
+     *  @param  \Closure    $getter     The configuration callback
      */
-    public function getConfig(array $options)
+    public function __construct(Closure $getter)
     {
-        $callback = function($name, $fallback = null) use($options)
-        {
-            if (isset($options[$name]) ||
-                    array_key_exists($name, $options)) {
-                return $options[$name];
-            }
-
-            if (1 < func_num_args()) {
-                return $fallback;
-            }
-
-            $message = "Missing configuration directive: $name";
-            throw new InvalidConfigError($message);
-        };
-
-        $config = new CallbackConfig($callback);
-        return $config;
+        $this->getter = $getter;
     }
 
     /**
-     *  Test error handling of hasOption()
+     *  Obtain the value of a particular option
      *
-     *  The testGetOptionError() method verifies that the hasOption()
-     *  method does not violate the AnyConfig interface even in case the
-     *  getOption() method raises an unrecognized exception.
+     *  The getOption() method will return the value associated with the
+     *  option identified by the given $name. If there is no such option,
+     *  it will either return the $fallback value - if provided -, or
+     *  raise an exception implementing the AnyConfigException interface.
      *
-     *  @expectedException  PHPUnit_Framework_Error_Warning
-     *  @test
+     *  @param  string      $name       The name of the option to retrieve
+     *  @param  mixed       $fallback   The fallback value, if any
      *
-     *  @throws \PHPUnit_Framework_Error_Warning
-     *          Raised in case the test is successful
-     */
-    public function testHasOptionError()
-    {
-        $class = "Lousson\\Config\\AbstractConfig";
-        $mock = $this->getMockForAbstractClass($class);
-
-        $mock->expects($this->any())
-            ->method("getOption")
-            ->will($this->throwException(new Exception));
-
-        $mock->hasOption("foobar");
-    }
-
-    /**
-     *  Test error handling of getOption()
-     *
-     *  The testGetOptionError() method verifies that the getOption()
-     *  method does not violate the AnyConfig interface even in case the
-     *  callback raises an unrecognized exception.
-     *
-     *  @expectedException  Lousson\Config\AnyConfigException
-     *  @test
+     *  @return mixed
+     *          The value of the option is returned on success
      *
      *  @throws \Lousson\Config\AnyConfigException
-     *          Raised in case the test is successful
+     *          Raised in case of any error
+     *
+     *  @link http://php.net/manual/en/function.func-num-args.php
+     *  @link http://php.net/manual/en/language.functions.php
      */
-    public function testGetOptionError()
+    public function getOption($name, $fallback = null)
     {
-        $callback = function($name) {
-            throw new Exception("TEST!");
-        };
+        try {
+            $getter = $this->getter;
+            $result = 1 === func_num_args()
+                ? $getter($name)
+                : $getter($name, $fallback);
+        }
+        catch (AnyConfigException $error) {
+            /* Nothing to do; allowed by the AnyConfig interface */
+            throw $error;
+        }
+        catch (Exception $error) {
+            $class = get_class($error);
+            $message = $error->getMessage();
+            $code = $error->getCode();
+            $log = "Caught unexpected $class: $message ($code)";
+            throw new RuntimeConfigError($log, 0, $error);
+        }
 
-        $config = new CallbackConfig($callback);
-        $config->getOption("foobar");
+        return $result;
     }
+
+    /**
+     *  The configuration getter callback
+     *
+     *  @var array
+     */
+    private $getter;
 }
 
