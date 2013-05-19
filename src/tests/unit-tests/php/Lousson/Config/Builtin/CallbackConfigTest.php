@@ -83,9 +83,8 @@ class CallbackConfigTest extends AbstractConfigTest
                 return $fallback;
             }
 
-            throw new ConfigException(sprintf(
-                "Missing configuration directive: %s", $name
-            ));
+            $message = "Missing configuration directive: $name";
+            throw new ConfigException($message);
         };
 
         $config = new CallbackConfig($callback);
