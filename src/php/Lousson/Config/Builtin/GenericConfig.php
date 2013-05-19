@@ -117,9 +117,8 @@ class GenericConfig implements AnyConfig
             return $fallback;
         }
 
-        throw new InvalidConfigError(sprintf(
-            "Missing configuration directive: %s", $name
-        ));
+        $message = "Missing configuration directive: $name";
+        throw new InvalidConfigError($message);
     }
 
     /**

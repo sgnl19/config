@@ -189,12 +189,13 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetExpected(AnyConfig $config, $key, $value)
     {
-        $this->assertEquals(
-            $value, $config->getOption($key), sprintf(
+        $message = sprintf(
             "%s::getOption(%s) is expected to return %s",
             get_class($config), var_export($key, true),
             is_object($value)? get_class($value): gettype($value)
-        ));
+        );
+
+        $this->assertEquals($value, $config->getOption($key), $message);
     }
 
     /**
@@ -218,12 +219,12 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testHasExpected(AnyConfig $config, $key, $value)
     {
-        $this->assertEquals(
-            TRUE, $config->hasOption($key), sprintf(
+        $message = sprintf(
             "%s::hasOption(%s) is expected to return TRUE",
             get_class($config), var_export($key, true)
-        ));
+        );
 
+        $this->assertTrue($config->hasOption($key), $message);
         $this->testGetExpected($config, $key, $value);
     }
 
@@ -302,12 +303,12 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
             $token = $this->getRandomKey($config, $values);
         }
 
-        $this->assertEquals(
-            FALSE, $config->hasOption($token), sprintf(
+        $message = sprintf(
             "%s::hasOption(%s) is expected to return FALSE",
             get_class($config), var_export($token, true)
-        ));
+        );
 
+        $this->assertFalse($config->hasOption($token), $message);
         $this->testGetUnexpected($config, $values, $token);
     }
 
@@ -337,13 +338,13 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
         }
 
         $option = $config->getOption($token, $token);
-
-        $this->assertEquals(
-            $token, $config->getOption($token, $token), sprintf(
+        $message = sprintf(
             "%1\$s::getOption(%2\$s, %2\$s) is expected to return ".
             "the provided fallback value",
             get_class($config), var_export($token, true)
-        ));
+        );
+
+        $this->assertEquals($token, $option, $message);
     }
 
     /**
