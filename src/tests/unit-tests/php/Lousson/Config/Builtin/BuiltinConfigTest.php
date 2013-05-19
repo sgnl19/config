@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Definition of the Lousson\Config\Builtin\GenericConfigTest class
+ *  Definition of the Lousson\Config\Builtin\BuiltinConfigTest class
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -44,18 +44,18 @@ namespace Lousson\Config\Builtin;
 
 /** Dependencies: */
 use Lousson\Config\AbstractConfigTest;
-use Lousson\Config\Builtin\GenericConfig;
+use Lousson\Config\Builtin\BuiltinConfig;
 
 /**
- *  Test case for the GenericConfig implementation
+ *  Test case for the BuiltinConfig implementation
  *
- *  The GenericConfigTest is a test case for the GenericConfig class,
+ *  The BuiltinConfigTest is a test case for the BuiltinConfig class,
  *  implemented on top of the AbstractConfigTest.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
  */
-class GenericConfigTest extends AbstractConfigTest
+class BuiltinConfigTest extends AbstractConfigTest
 {
     /**
      *  Obtain the config to test
@@ -71,7 +71,7 @@ class GenericConfigTest extends AbstractConfigTest
      */
     public function getConfig(array $options)
     {
-        $config = new GenericConfig();
+        $config = new BuiltinConfig();
 
         foreach ($options as $key => $value) {
             $config->setOption($key, $value);

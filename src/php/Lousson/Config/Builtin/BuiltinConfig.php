@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Builtin\GenericConfig class definition
+ *  Lousson\Config\Builtin\BuiltinConfig class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -48,16 +48,16 @@ use Lousson\Config\AnyConfig;
 use Lousson\Config\Error\InvalidConfigError;
 
 /**
- *  A generic implementation of the AnyConfig interface
+ *  Default implementation of the AnyConfig interface
  *
- *  The GenericConfig class is a generic implementation of the AnyConfig
+ *  The BuiltinConfig class is the default implementation of the AnyConfig
  *  interface. It allows the definition of any configuration directive at
  *  runtime.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
  */
-class GenericConfig implements AnyConfig
+class BuiltinConfig implements AnyConfig
 {
     /**
      *  Create a config instance
