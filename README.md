@@ -1,5 +1,5 @@
 Lousson: Config
-==============
+===============
 
 The lousson/config package provides flexible facilities for application
 configuration and setup - in various formats.
@@ -56,7 +56,7 @@ Copyright & License
 Unless denoted otherwise, the following terms apply to all software
 provided within the lousson/config package:
 
-	Copyright (c) 2012, The Lousson Project
+	Copyright (c) 2012 - 2013, The Lousson Project
 	
 	All rights reserved.
 	
