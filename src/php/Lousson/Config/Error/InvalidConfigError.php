@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\AbstractConfig class definition
+ *  Lousson\Config\Error\InvalidConfigError class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -40,63 +40,25 @@
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config;
+namespace Lousson\Config\Error;
 
 /** Dependencies: */
-use Lousson\Config\AnyConfig;
 use Lousson\Config\AnyConfigException;
-use Exception;
+use InvalidArgumentException;
 
 /**
- *  An abstract implementation of the AnyConfig interface
+ *  Exception raised in case of invalid configuration options
  *
- *  The AbstractConfig class may be used as base class for implementations
- *  of the AnyConfig interface. It attempts to fulfill the interface as far
- *  as possible, without assuming too many implementation details.
+ *  The InvalidConfigError class is a default implementation of the
+ *  AnyConfigException. It extends PHP's native InvalidArgumentException
+ *  and is used by the builtin classes whenever an attempt to retrieve
+ *  a nonexistent option is encountered.
  *
- *  @since      lousson/config-0.2.0
+ *  @since      lousson/config-0.3.0
  *  @package    org.lousson.config
  */
-abstract class AbstractConfig implements AnyConfig
+class InvalidConfigError
+extends InvalidArgumentException implements AnyConfigException
 {
-    /**
-     *  Check whether a particular option exists
-     *
-     *  The hasOption() method will return TRUE in case a subsequent call
-     *  to getOption() would succeed, when the same $name but no $fallback
-     *  is provided. FALSE will be returned otherwise.
-     *
-     *  Note that the default implementation actually attempts to retrieve
-     *  the configuration option. Thus; authors of derived classes should
-     *  provide their own implementation of the hasOption() method, in
-     *  order to increase the overall performance.
-     *
-     *  @param  string      $name       The name of the option to check
-     *
-     *  @return boolean
-     *          TRUE is returned if the option exists, FALSE otherwise
-     */
-    public function hasOption($name)
-    {
-        $result = false;
-
-        try {
-            $this->getOption($name);
-            $result = true;
-        }
-        catch (AnyConfigException $error) {
-            /* Nothing to do; this should be perfectly fine */
-        }
-        catch (Exception $error) {
-            $class = get_class($error);
-            $message = $error->getMessage();
-            $code = $error->getCode();
-            $trace = $error->getTraceAsString();
-            $log = "Caught unexpected $class: $message ($code)\n$trace";
-            trigger_error($log, E_USER_WARNING);
-        }
-
-        return $result;
-    }
 }
 

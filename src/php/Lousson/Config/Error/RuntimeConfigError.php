@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012 - 2013, The Lousson Project                        *
+ * Copyright (c) 2013, The Lousson Project                               *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -32,30 +32,32 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Builtin\ConfigException class definition
+ *  Lousson\Config\Error\RuntimeConfigError class definition
  *
  *  @package    org.lousson.config
- *  @copyright  (c) 2012 - 2013, The Lousson Project
+ *  @copyright  (c) 2013, The Lousson Project
  *  @license    http://opensource.org/licenses/bsd-license.php New BSD License
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config\Builtin;
+namespace Lousson\Config\Error;
 
 /** Dependencies: */
 use Lousson\Config\AnyConfigException;
 use RuntimeException;
 
 /**
- *  Default implementation of the AnyConfigException interface
+ *  Exception raised in case of internal errors
  *
- *  The ConfigException class provides a default implementation of the
- *  AnyConfigException, extending PHP's RuntimeException class.
+ *  The RuntimeConfigError class is a default implementation of the
+ *  AnyConfigException. It extends PHP's native RuntimeException
+ *  and is used by the builtin classes whenever an internal error is
+ *  encountered.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/config-0.3.0
  *  @package    org.lousson.config
  */
-class ConfigException
+class RuntimeConfigError
 extends RuntimeException implements AnyConfigException
 {
 }

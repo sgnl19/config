@@ -45,7 +45,8 @@ namespace Lousson\Config\Builtin;
 /** Dependencies: */
 use Lousson\Config\AbstractConfigTest;
 use Lousson\Config\Builtin\CallbackConfig;
-use Lousson\Config\Builtin\ConfigException;
+use Lousson\Config\Error\InvalidConfigError;
+use Exception;
 
 /**
  *  Test case for the CallbackConfig implementation
@@ -83,13 +84,61 @@ class CallbackConfigTest extends AbstractConfigTest
                 return $fallback;
             }
 
-            throw new ConfigException(sprintf(
+            throw new InvalidConfigError(sprintf(
                 "Missing configuration directive: %s", $name
             ));
         };
 
         $config = new CallbackConfig($callback);
         return $config;
+    }
+
+    /**
+     *  Test error handling of hasOption()
+     *
+     *  The testGetOptionError() method verifies that the hasOption()
+     *  method does not violate the AnyConfig interface even in case the
+     *  getOption() method raises an unrecognized exception.
+     *
+     *  @expectedException  PHPUnit_Framework_Error_Warning
+     *  @test
+     *
+     *  @throws \PHPUnit_Framework_Error_Warning
+     *          Raised in case the test is successful
+     */
+    public function testHasOptionError()
+    {
+        $class = "Lousson\\Config\\AbstractConfig";
+        $mock = $this->getMockForAbstractClass($class);
+
+        $mock->expects($this->any())
+            ->method("getOption")
+            ->will($this->throwException(new Exception));
+
+        $mock->hasOption("foobar");
+    }
+
+    /**
+     *  Test error handling of getOption()
+     *
+     *  The testGetOptionError() method verifies that the getOption()
+     *  method does not violate the AnyConfig interface even in case the
+     *  callback raises an unrecognized exception.
+     *
+     *  @expectedException  Lousson\Config\AnyConfigException
+     *  @test
+     *
+     *  @throws \Lousson\Config\AnyConfigException
+     *          Raised in case the test is successful
+     */
+    public function testGetOptionError()
+    {
+        $callback = function($name) {
+            throw new Exception("TEST!");
+        };
+
+        $config = new CallbackConfig($callback);
+        $config->getOption("foobar");
     }
 }
 

@@ -43,8 +43,11 @@
 namespace Lousson\Config\Builtin;
 
 /** Dependencies: */
+use Lousson\Config\AnyConfigException;
 use Lousson\Config\AbstractConfig;
+use Lousson\Config\Error\RuntimeConfigError;
 use Closure;
+use Exception;
 
 /**
  *  A Closure-based implementation of the AnyConfig interface
@@ -94,10 +97,23 @@ class CallbackConfig extends AbstractConfig
      */
     public function getOption($name, $fallback = null)
     {
-        $getter = $this->getter;
-        $result = 1 === func_num_args()
-            ? $getter($name)
-            : $getter($name, $fallback);
+        try {
+            $getter = $this->getter;
+            $result = 1 === func_num_args()
+                ? $getter($name)
+                : $getter($name, $fallback);
+        }
+        catch (AnyConfigException $error) {
+            /* Nothing to do; allowed by the AnyConfig interface */
+            throw $error;
+        }
+        catch (Exception $error) {
+            $class = get_class($error);
+            $message = $error->getMessage();
+            $code = $error->getCode();
+            $log = "Caught unexpected $class: $message ($code)";
+            throw new RuntimeConfigError($log, 0, $error);
+        }
 
         return $result;
     }

@@ -45,7 +45,7 @@ namespace Lousson\Config\Builtin;
 
 /** Dependencies: */
 use Lousson\Config\AnyConfig;
-use Lousson\Config\Builtin\ConfigException;
+use Lousson\Config\Error\InvalidConfigError;
 
 /**
  *  A generic implementation of the AnyConfig interface
@@ -117,7 +117,7 @@ class GenericConfig implements AnyConfig
             return $fallback;
         }
 
-        throw new ConfigException(sprintf(
+        throw new InvalidConfigError(sprintf(
             "Missing configuration directive: %s", $name
         ));
     }
