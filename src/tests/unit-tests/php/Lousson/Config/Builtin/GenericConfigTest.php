@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,7 +30,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config\Builtin;
 
 /**
  *  Definition of the Lousson\Config\Builtin\GenericConfigTest class
@@ -41,6 +40,8 @@ namespace Lousson\Config\Builtin;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config\Builtin;
+
 /** Dependencies: */
 use Lousson\Config\AbstractConfigTest;
 use Lousson\Config\Builtin\GenericConfig;
@@ -48,8 +49,8 @@ use Lousson\Config\Builtin\GenericConfig;
 /**
  *  Test case for the GenericConfig implementation
  *
- *  The Lousson\Config\Builtin\GenericConfigTest is a test case for
- *  the Lousson\Config\Builtin\GenericConfig class.
+ *  The GenericConfigTest is a test case for the GenericConfig class,
+ *  implemented on top of the AbstractConfigTest.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
@@ -59,14 +60,14 @@ class GenericConfigTest extends AbstractConfigTest
     /**
      *  Obtain the config to test
      *
-     *  The getConfig() method will return the instance of the
-     *  Lousson\Config\Builtin\GenericConfig class.
-     *  This instance will be pre-set with the options specified
-     *  by the associative $options array.
+     *  The getConfig() method returns the instance of the AnyConfig
+     *  interface that is to be tested. It will be pre-set with the given
+     *  $options.
      *
-     *  @param  array   $options
+     *  @param  array   $options    The options to apply
      *
-     *  @return Lousson\Config\Builtin\GenericConfig
+     *  @return \Lousson\Config\AnyConfig
+     *          A config instance is returned on success
      */
     public function getConfig(array $options)
     {
@@ -86,19 +87,19 @@ class GenericConfigTest extends AbstractConfigTest
      *  method with the given $key and $value before passing the test
      *  on to testGetExpected() and testHasExpected().
      *
-     *  @param  string  $key
-     *  @param  string  $value
+     *  @param  string  $key        The config key
+     *  @param  string  $value      The config value
      *
-     *  @throws PHPUnit_Framework_AssertionFailedError
+     *  @dataProvider   provideTestData
+     *  @test
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
      *          Raised in case testGetExpected() or testHasExpected()
      *          fail after the setConfig() method has been invoked
-     *
-     *  @dataProvider           provideTestData
-     *  @test
      */
     public function testSetConfig($key, $value)
     {
-        $config = new GenericConfig();
+        $config = $this->getConfig(array());
         $config->setOption($key, $value);
 
         $this->testGetExpected($config, $key, $value);

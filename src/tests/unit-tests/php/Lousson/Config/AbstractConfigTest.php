@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config;
 
 /**
- *  Definition of the Lousson\Config\AbstractConfigTest class
+ *  Lousson\Config\AbstractConfigTest class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -42,6 +41,8 @@ namespace Lousson\Config;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config;
+
 /** Dependencies: */
 use Lousson\Config\AnyConfig;
 use PHPUnit_Framework_TestCase;
@@ -49,8 +50,8 @@ use PHPUnit_Framework_TestCase;
 /**
  *  Abstract test case for AnyConfig implementation
  *
- *  The Lousson\Config\AbstractConfigTest class is a basement for testing
- *  implementations of the Lousson\Config\AnyConfig interface.
+ *  The AbstractConfigTest class is a basement for testing implementations
+ *  of the AnyConfig interface.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
@@ -60,18 +61,18 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
     /**
      *  Obtain the config to test
      *
-     *  The getConfig() method shall return the instance of the
-     *  Lousson\Config\AnyConfig interface that is to be tested.
-     *  This instance shall be pre-set with the options specified
-     *  by the associative $options array.
+     *  The getConfig() method returns the instance of the AnyConfig
+     *  interface that is to be tested. It will be pre-set with the given
+     *  $options.
      *
-     *  @param  array   $options
+     *  @param  array   $options    The options to apply
      *
-     *  @return Lousson\Config\AnyConfig
+     *  @return \Lousson\Config\AnyConfig
+     *          A config instance is returned on success
      */
     abstract function getConfig(array $options);
 
-    /** 
+    /**
      *  Obtain key/value pairs for testing
      *
      *  The getTestData() method returns an associative array of key/value
@@ -79,6 +80,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  to pre-set configuration options to test.
      *
      *  @return array
+     *          An array of scalar key/value pairs is returned on success
      */
     public function getTestData()
     {
@@ -100,6 +102,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  in the object.
      *
      *  @return array
+     *          An array of test parameters is returned on success
      */
     public function provideTestConfig()
     {
@@ -121,6 +124,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  if any.
      *
      *  @return array
+     *          An array of test parameters is returned on success
      */
     public function provideTestData()
     {
@@ -146,6 +150,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  instance.
      *
      *  @return array
+     *          An array of test parameters is returned on success
      */
     public function provideTestParameter()
     {
@@ -172,15 +177,15 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  getOption() method returns the expected $value when invoked
      *  for the given $key.
      *
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  string                      $key
-     *  @param  mixed                       $value
-     *
-     *  @throws PHPUnit_Framework_AssertionFailedError
-     *          Raised in case getOption() does not return $value
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  string                      $key    The config key
+     *  @param  mixed                       $value  The config value
      *
      *  @dataProvider       provideTestParameter
      *  @test
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case getOption() does not return $value
      */
     public function testGetExpected(AnyConfig $config, $key, $value)
     {
@@ -199,10 +204,10 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  hasOption() method returns TRUE for the given $key and,
      *  furthermore, whether a subsequent call to getOption() really
      *  returns the expected $value.
-     *  
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  string                      $key
-     *  @param  mixed                       $value
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  string                      $key    The config key
+     *  @param  mixed                       $value  The config value
      *
      *  @throws PHPUnit_Framework_AssertionFailedError
      *          Raised in case hasOption() does not return TRUE or
@@ -233,19 +238,19 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  It is ensured that this token will not be a valid key for any of
      *  the given $values.
      *
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  array                       $values
-     *  @param  string                      $token
-     *
-     *  @throws Lousson\Config\AnyConfigException
-     *          Raised in case of success (this is a test!)
-     *
-     *  @throws PHPUnit_Framework_AssertionFailedError
-     *          Raised in case the $token is is a key within the $values
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
      *
      *  @dataProvider       provideTestConfig
      *  @expectedException  Lousson\Config\AnyConfigException
      *  @test
+     *
+     *  @throws \Lousson\Config\AnyConfigException
+     *          Raised in case of success (this is a test!)
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case the $token is is a key within the $values
      */
     public function testGetUnexpected(
         AnyConfig $config, $values = array(), $token = null)
@@ -275,20 +280,20 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  It is ensured that this token will not be a valid key for any of
      *  the given $values.
      *
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  array                       $values
-     *  @param  string                      $token
-     *
-     *  @throws Lousson\Config\AnyConfigException
-     *          Raised in case of success (this is a test!)
-     *
-     *  @throws PHPUnit_Framework_AssertionFailedError
-     *          Raised in case hasOption() does not return FALSE or the
-     *          $token is is a key within the $values
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
      *
      *  @dataProvider       provideTestConfig
      *  @expectedException  Lousson\Config\AnyConfigException
      *  @test
+     *
+     *  @throws \Lousson\Config\AnyConfigException
+     *          Raised in case of success (this is a test!)
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case hasOption() does not return FALSE or the
+     *          $token is is a key within the $values
      */
     public function testHasUnexpected(
         AnyConfig $config, $values = array(), $token = null)
@@ -313,16 +318,16 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  getOption() method returns a generic fallback value when neither
      *  of the given $values is used.
      *
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  array                       $values
-     *  @param  string                      $token
-     *
-     *  @throws PHPUnit_Framework_AssertionFailedError
-     *          Raised in case getOption() does not return the generic
-     *          fallback value
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
      *
      *  @dataProvider       provideTestConfig
      *  @test
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case getOption() does not return the generic
+     *          fallback value
      */
     public function testFallback(
         AnyConfig $config, $values = array(), $token = null)
@@ -332,7 +337,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
         }
 
         $option = $config->getOption($token, $token);
-        
+
         $this->assertEquals(
             $token, $config->getOption($token, $token), sprintf(
             "%1\$s::getOption(%2\$s, %2\$s) is expected to return ".
@@ -348,10 +353,11 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *  character sequence that is not a key within the given list of
      *  $values and assumed to be no valid $config option.
      *
-     *  @param  Lousson\Config\AnyConfig    $config
-     *  @param  array                       $values
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values Known config values
      *
      *  @return string
+     *          A nonexistent configuration key is returned on success
      */
     private function getRandomKey(AnyConfig $config, $values = array())
     {

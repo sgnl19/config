@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config\Builtin;
 
 /**
- *  Definition of the Lousson\Config\Builtin\CallbackConfigTest class
+ *  Lousson\Config\Builtin\CallbackConfigTest class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -41,6 +40,8 @@ namespace Lousson\Config\Builtin;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config\Builtin;
+
 /** Dependencies: */
 use Lousson\Config\AbstractConfigTest;
 use Lousson\Config\Builtin\CallbackConfig;
@@ -49,8 +50,8 @@ use Lousson\Config\Builtin\ConfigException;
 /**
  *  Test case for the CallbackConfig implementation
  *
- *  The Lousson\Config\Builtin\CallbackConfigTest is a test case for
- *  the Lousson\Config\Builtin\CallbackConfig class.
+ *  The CallbackConfigTest is a test case for the CallbackConfig class,
+ *  implemented on top of the AbstractConfigTes.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
@@ -60,14 +61,14 @@ class CallbackConfigTest extends AbstractConfigTest
     /**
      *  Obtain the config to test
      *
-     *  The getConfig() method will return the instance of the
-     *  Lousson\Config\Builtin\CallbackConfig class.
-     *  This instance will be pre-set with the options specified
-     *  by the associative $options array.
+     *  The getConfig() method returns the instance of the AnyConfig
+     *  interface that is to be tested. It will be pre-set with the given
+     *  $options.
      *
-     *  @param  array   $options
+     *  @param  array   $options    The options to apply
      *
-     *  @return Lousson\Config\Builtin\CallbackConfig
+     *  @return \Lousson\Config\AnyConfig
+     *          A config instance is returned on success
      */
     public function getConfig(array $options)
     {
