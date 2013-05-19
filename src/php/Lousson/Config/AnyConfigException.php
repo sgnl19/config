@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config;
 
 /**
- *  Definition of the Lousson\Config\AnyConfigException interface
+ *  Lousson\Config\AnyConfigException interface declaration
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -41,14 +40,14 @@ namespace Lousson\Config;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-/** Dependencies: None. */
+namespace Lousson\Config;
 
 /**
  *  An interface configuration exceptions
  *
- *  The Lousson\Config\AnyConfigException interface declares an interface
- *  for exceptions raised by instances of the Lousson\Config\AnyConfig
- *  interface.
+ *  The AnyConfigException interface declares an interface for exceptions
+ *  raised by instances of the interfaces declared in the Lousson\Config
+ *  namespace.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config

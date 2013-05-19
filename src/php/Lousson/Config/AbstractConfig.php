@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config;
 
 /**
- *  Definition of the Lousson\Config\AbstractConfig class
+ *  Lousson\Config\AbstractConfig class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -41,6 +40,8 @@ namespace Lousson\Config;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config;
+
 /** Dependencies: */
 use Lousson\Config\AnyConfig;
 use Lousson\Config\AnyConfigException;
@@ -48,10 +49,9 @@ use Lousson\Config\AnyConfigException;
 /**
  *  An abstract implementation of the AnyConfig interface
  *
- *  The Lousson\Config\AbstractConfig class may get used as base class for
- *  implementations of the Lousson\Config\AnyConfig interface. It attempts
- *  to fulfill the interface as far as possible, without assuming too much
- *  implementation details.
+ *  The AbstractConfig class may be used as base class for implementations
+ *  of the AnyConfig interface. It attempts to fulfill the interface as far
+ *  as possible, without assuming too many implementation details.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
@@ -59,15 +59,16 @@ use Lousson\Config\AnyConfigException;
 abstract class AbstractConfig implements AnyConfig
 {
     /**
-     *  Check whether a particular option is set
+     *  Check whether a particular option exists
      *
      *  The hasOption() method will return TRUE in case a subsequent call
      *  to getOption() would succeed, when the same $name but no $fallback
      *  is provided. FALSE will be returned otherwise.
      *
-     *  @param  string  $name
+     *  @param  string      $name       The name of the option to check
      *
      *  @return boolean
+     *          TRUE is returned if the option exists, FALSE otherwise
      */
     public function hasOption($name)
     {

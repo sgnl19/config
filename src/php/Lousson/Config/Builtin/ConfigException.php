@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config\Builtin;
 
 /**
- *  Definition of the Lousson\Config\Builtin\ConfigException class
+ *  Lousson\Config\Builtin\ConfigException class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -41,6 +40,8 @@ namespace Lousson\Config\Builtin;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config\Builtin;
+
 /** Dependencies: */
 use Lousson\Config\AnyConfigException;
 use RuntimeException;
@@ -48,9 +49,8 @@ use RuntimeException;
 /**
  *  Default implementation of the AnyConfigException interface
  *
- *  The Lousson\Config\Builtin\ConfigException class provides a default
- *  implementation of the Lousson\Config\AnyConfigException, by extending
- *  PHP's RuntimeException class.
+ *  The ConfigException class provides a default implementation of the
+ *  AnyConfigException, extending PHP's RuntimeException class.
  *
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config

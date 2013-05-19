@@ -2,7 +2,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=75: *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright (c) 2012, The Lousson Project                               *
+ * Copyright (c) 2012 - 2013, The Lousson Project                        *
  *                                                                       *
  * All rights reserved.                                                  *
  *                                                                       *
@@ -30,10 +30,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED   *
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                    *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Lousson\Config\Builtin;
 
 /**
- *  Definition of the Lousson\Config\Builtin\CallbackConfig class
+ *  Lousson\Config\Builtin\CallbackConfig class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 The Lousson Project
@@ -41,59 +40,53 @@ namespace Lousson\Config\Builtin;
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
+namespace Lousson\Config\Builtin;
+
 /** Dependencies: */
 use Lousson\Config\AbstractConfig;
+use Closure;
 
 /**
  *  A Closure-based implementation of the AnyConfig interface
  *
- *  The Lousson\Config\Builtin\CallbackConfig class is a flexible
- *  implementation of the Lousson\Config\AnyConfig interface that
- *  uses a user-defined Closure to retrieve configuration values.
+ *  The CallbackConfig class is a flexible implementation of the AnyConfig
+ *  interface, using a Closure to retrieve configuration values.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
  */
 class CallbackConfig extends AbstractConfig
 {
-    // The tag below is necessary due to a bug in PHP_CodeCoverage that
-    // causes Closures to confuse the whole processing logic. Nevertheless,
-    // the Lousson\Config\Builtin\CallbackConfigTest class does in fact
-    // use the constructor - otherwise, all the tests would fail anyway.
-    // @codeCoverageIgnoreStart
-
     /**
-     *  Constructor
+     *  Create a callback config instance
      *
      *  The constructor allows to pass a Closure $getter that is used to
      *  retrieve configuration values. This callback must provide the exact
-     *  same interface as AnyConfig::getOption().
+     *  same interface as the getOption() method, otherwise the behavior
+     *  is undefined.
      *
-     *  @param  Closure $getter
+     *  @param  \Closure    $getter     The configuration callback
      */
-    public function __construct(\Closure $getter)
+    public function __construct(Closure $getter)
     {
-        $this->_getter = $getter;
+        $this->getter = $getter;
     }
 
-    // @codeCoverageIgnoreEnd
-
     /**
-     *  Get the value of a particular option
+     *  Obtain the value of a particular option
      *
      *  The getOption() method will return the value associated with the
      *  option identified by the given $name. If there is no such option,
-     *  it will return the value of the given $fallback - but only in case
-     *  a fallback has been provided.
-     *  If neither is available, the getOption() method will raise a
-     *  Lousson\Config\AnyConfigException class.
+     *  it will either return the $fallback value - if provided -, or
+     *  raise an exception implementing the AnyConfigException interface.
      *
-     *  @param  string  $name
-     *  @param  mixed   $fallback
+     *  @param  string      $name       The name of the option to retrieve
+     *  @param  mixed       $fallback   The fallback value, if any
      *
      *  @return mixed
+     *          The value of the option is returned on success
      *
-     *  @throws Lousson\Config\AnyConfigException
+     *  @throws \Lousson\Config\AnyConfigException
      *          Raised in case of any error
      *
      *  @link http://php.net/manual/en/function.func-num-args.php
@@ -101,7 +94,7 @@ class CallbackConfig extends AbstractConfig
      */
     public function getOption($name, $fallback = null)
     {
-        $getter = $this->_getter;
+        $getter = $this->getter;
         $result = 1 === func_num_args()
             ? $getter($name)
             : $getter($name, $fallback);
@@ -114,6 +107,6 @@ class CallbackConfig extends AbstractConfig
      *
      *  @var array
      */
-    private $_getter;
+    private $getter;
 }
 
