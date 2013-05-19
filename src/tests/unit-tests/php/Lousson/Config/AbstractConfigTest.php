@@ -35,7 +35,7 @@
  *  Lousson\Config\AbstractConfigTest class definition
  *
  *  @package    org.lousson.config
- *  @copyright  (c) 2012 The Lousson Project
+ *  @copyright  (c) 2012 - 2013, The Lousson Project
  *  @license    http://opensource.org/licenses/bsd-license.php New BSD License
  *  @author     Attila Levai <alevai at quirkies.org>
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
