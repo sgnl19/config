@@ -45,7 +45,10 @@ namespace Lousson\Config\Builtin;
 
 /** Dependencies: */
 use Lousson\Config\AnyConfig;
+use Lousson\Config\AnyConfigException;
 use Lousson\Config\Error\InvalidConfigError;
+use Lousson\Record\Builtin\BuiltinRecordUtil;
+use Lousson\Record\Error\InvalidRecordError;
 
 /**
  *  Default implementation of the AnyConfig interface
@@ -78,11 +81,24 @@ class BuiltinConfig implements AnyConfig
      *  The setOption() method can be used to set or update a $value for
      *  the option identified by the given $name.
      *
-     *  @param  string  $name       The name of the option to update
-     *  @param  string  $value      The value to apply
+     *  @param  string  $name    The name of the option to update
+     *  @param  mixed   $value   The value to apply
+     *
+     *  @throws \Lousson\Record\Error\InvalidRecordError
+     *          Raised in case the option $value is invalid
      */
     public function setOption($name, $value)
     {
+    	try {
+    		$value = BuiltinRecordUtil::normalizeItem($value);
+    	} catch (Exception $e) {
+            $message = "Invalid value for option $name: ".
+            	var_export($value, true);
+            $code = AnyConfigException::E_INVALID_OPTION;
+            
+            throw new InvalidRecordError($message, $code, $e);
+    	}
+    	
         $this->options[$name] = $value;
     }
 
@@ -108,13 +124,26 @@ class BuiltinConfig implements AnyConfig
      */
     public function getOption($name, $fallback = null)
     {
-        if (isset($this->options[$name]) ||
-                array_key_exists($name, $this->options)) {
-            return $this->options[$name];
-        }
-
-        if (1 < func_num_args()) {
+        if (isset($this->options[$name])) {
+        	try {
+        		$option = BuiltinRecordUtil::normalizeItem(
+        			$this->options[$name]
+				);
+        	} catch (Exception $e) {
+        		$message = 'Invalid option requested for '.$name.': '.
+        			$e->getMessage().' ('.$e->getCode().')';
+        		$code = AnyConfigException::E_INVALID_OPTION;
+        		
+        		throw new InvalidConfigError($message, $code, $e);
+        	}
+        	
+            return $option;
+        } 
+        else if (1 < func_num_args()) {
             return $fallback;
+        } 
+        else if (array_key_exists($name, $this->options)) {
+        	return null;
         }
 
         $message = "Missing configuration directive: $name";
@@ -135,8 +164,49 @@ class BuiltinConfig implements AnyConfig
      */
     public function hasOption($name)
     {
-        return isset($this->options[$name])
+        $hasOption = isset($this->options[$name])
             || array_key_exists($name, $this->options);
+        
+        if (!$hasOption) {
+        	return false;
+        }
+        
+        return self::isValidItem($this->options[$name]);
+    }
+    
+    /**
+     *  Determine whether an item is valid
+     *  
+     *  The method isValidItem() is used internally to determine if $item
+     *  is a valid item.
+     *  NOTE: This is a workaround for the soon-to-be implemented isValidItem
+     *  method in BuiltinRecordUtil. It will then be repplaced and 
+     *  removed completely.
+     *  
+     *  @param mixed $item
+     *  @return boolean
+     */
+    private static function isValidItem($item)
+    {
+    	$hasOption = true;
+    	$message = '';
+    	if (is_array($item)) {
+    		$hasOption = BuiltinRecordUtil::isValidData($item, $message);
+    		if (!$hasOption) {
+    			trigger_error($message, E_USER_NOTICE);
+    			 
+    			return false;
+    		}
+    	}
+    	 
+    	$hasOption = BuiltinRecordUtil::isValidType($item, $message);
+    	if (!$hasOption) {
+    		trigger_error($message, E_USER_NOTICE);
+    	
+    		return false;
+    	}
+    	
+    	return true; 
     }
 
     /**

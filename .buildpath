@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+	<buildpathentry kind="src" path="src/php/Lousson/Config"/>
+	<buildpathentry combineaccessrules="false" kind="prj" path="/record"/>
+	<buildpathentry kind="src" path="src/tests/unit-tests"/>
+</buildpath>

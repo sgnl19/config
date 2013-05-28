@@ -71,6 +71,11 @@ ${contents}
         <channel>pear.lousson.org</channel>
         <min>0.2.0</min>
       </package>
+      <package>
+        <name>record</name>
+        <channel>pear.lousson.org</channel>
+        <min>0.1.0</min>
+      </package>
     </required>
   </dependencies>
 
