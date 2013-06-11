@@ -1,8 +1,8 @@
 Lousson: Config
 ===============
 
-The lousson/config package provides flexible facilities for application
-configuration and setup - in various formats.
+The `lousson/Lousson_Config` package provides flexible facilities for
+application configuration and setup - in various formats.
 
 
 Dependencies
@@ -13,6 +13,7 @@ compatible autoload implementation:
 
 - **PHP 5.3.0+**:                           http://www.php.net/
 - **PSR-0 Autoloader**:                     http://pear.phix-project.org/
+- **Lousson_Record**:                       http://pear.lousson.org/
 
 However, there is also a bunch of tools the development and build
 processes rely on, e.g.:
@@ -35,7 +36,7 @@ http://pear.lousson.org - thus, one can use the "pear" script to
 install any of them, e.g.:
 
 	pear channel-discover pear.lousson.org
-	pear install lousson/config
+	pear install lousson/Lousson_Config
 
 The complete sourcecode and version history is avialabe at GitHub.
 One may either visit http://github.com/lousson/config or clone
@@ -54,23 +55,23 @@ Copyright & License
 -------------------
 
 Unless denoted otherwise, the following terms apply to all software
-provided within the lousson/config package:
+provided within the `lousson/Lousson_Config` package:
 
 	Copyright (c) 2012 - 2013, The Lousson Project
-	
+
 	All rights reserved.
-	
+
 	Redistribution and use in source and binary forms, with or without
 	modification, are permitted provided that the following conditions
 	are met:
-	
+
 	1) Redistributions of source code must retain the above copyright
 	   notice, this list of conditions and the following disclaimer.
 	2) Redistributions in binary form must reproduce the above copyright
 	   notice, this list of conditions and the following disclaimer in
 	   the documentation and/or other materials provided with the
 	   distribution.
-	
+
 	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
