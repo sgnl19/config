@@ -117,8 +117,12 @@ class GenericConfig extends AbstractConfig
             $log = "Caught unexpected $class: $message ($code)";
             throw new RuntimeConfigError($log, 0, $error);
         }
+        
+        if ($result !== $fallback) {
+        	$result = BuiltinRecordUtil::normalizeItem($result);
+        }
 
-        return BuiltinRecordUtil::normalizeData($result);
+        return $result;
     }
 
     /**

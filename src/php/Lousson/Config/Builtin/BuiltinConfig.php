@@ -72,7 +72,7 @@ class BuiltinConfig implements AnyConfig
      */
     public function __construct(array $options = array())
     {
-        $this->options = $options;
+        $this->options = BuiltinRecordUtil::normalizeData($options);
     }
 
     /**
@@ -84,19 +84,20 @@ class BuiltinConfig implements AnyConfig
      *  @param  string  $name    The name of the option to update
      *  @param  mixed   $value   The value to apply
      *
-     *  @throws \Lousson\Record\Error\InvalidRecordError
+     *  @throws \Lousson\Record\Error\InvalidConfigError
      *          Raised in case the option $value is invalid
      */
     public function setOption($name, $value)
     {
     	try {
+    		$name = BuiltinRecordUtil::normalizeName($name);
     		$value = BuiltinRecordUtil::normalizeItem($value);
     	} catch (Exception $e) {
             $message = "Invalid value for option $name: ".
             	var_export($value, true);
             $code = AnyConfigException::E_INVALID_OPTION;
             
-            throw new InvalidRecordError($message, $code, $e);
+            throw new InvalidConfigError($message, $code, $e);
     	}
     	
         $this->options[$name] = $value;
@@ -124,6 +125,16 @@ class BuiltinConfig implements AnyConfig
      */
     public function getOption($name, $fallback = null)
     {
+    	try {
+    		$name = BuiltinRecordUtil::normalizeName($name);
+    	} catch (Exception $e) {
+            $message = "Invalid option name: ".
+            	var_export($name, true);
+            $code = AnyConfigException::E_INVALID_OPTION;
+            
+            throw new InvalidConfigError($message, $code, $e);
+    	}
+    	
         if (isset($this->options[$name])) {
         	try {
         		$option = BuiltinRecordUtil::normalizeItem(
@@ -188,19 +199,10 @@ class BuiltinConfig implements AnyConfig
      */
     private static function isValidItem($item)
     {
-    	$hasOption = true;
+    	$isValidItem = true;
     	$message = '';
-    	if (is_array($item)) {
-    		$hasOption = BuiltinRecordUtil::isValidData($item, $message);
-    		if (!$hasOption) {
-    			trigger_error($message, E_USER_NOTICE);
-    			 
-    			return false;
-    		}
-    	}
-    	 
-    	$hasOption = BuiltinRecordUtil::isValidType($item, $message);
-    	if (!$hasOption) {
+    	$isValidItem = BuiltinRecordUtil::isValidItem($item, $message);
+    	if (!$isValidItem) {
     		trigger_error($message, E_USER_NOTICE);
     	
     		return false;

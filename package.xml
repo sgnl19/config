@@ -67,12 +67,12 @@ ${contents}
         <max>3.999.9999</max>
       </package>
       <package>
-        <name>sniffs</name>
+        <name>Lousson_Sniffs</name>
         <channel>pear.lousson.org</channel>
         <min>0.2.0</min>
       </package>
       <package>
-        <name>record</name>
+        <name>Lousson_Record</name>
         <channel>pear.lousson.org</channel>
         <min>0.1.0</min>
       </package>
