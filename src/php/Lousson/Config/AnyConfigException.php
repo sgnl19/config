@@ -54,5 +54,39 @@ namespace Lousson\Config;
  */
 interface AnyConfigException
 {
+    /**
+     *  The default error code
+     *
+     *  @var int
+     */
+    const E_UNKNOWN_ERROR = 0x000;
+
+    /**
+     *  An error code to indicate arbitrary internal errors
+     *
+     *  @var int
+     */
+    const E_INTERNAL_ERROR = 0x1F4;
+
+    /**
+     *  An error code to indicate invalid options
+     *
+     *  @var int
+     */
+    const E_INVALID_OPTION = 0x190;
+
+    /**
+     *  An error code to indicate unsupported functionality
+     *
+     *  @var int
+     */
+    const E_NOT_SUPPORTED = 0x19F;
+
+    /**
+     *  An error code to indicate missing options
+     *
+     *  @var int
+     */
+    const E_NOT_FOUND = 0x194;
 }
 

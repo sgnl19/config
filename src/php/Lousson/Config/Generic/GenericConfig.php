@@ -43,9 +43,12 @@
 namespace Lousson\Config\Generic;
 
 /** Dependencies: */
+use Lousson\Record\Builtin\BuiltinRecordUtil;
+
 use Lousson\Config\AnyConfigException;
 use Lousson\Config\AbstractConfig;
 use Lousson\Config\Error\RuntimeConfigError;
+use Lousson\Record\Builtin;
 use Closure;
 use Exception;
 
@@ -113,6 +116,10 @@ class GenericConfig extends AbstractConfig
             $code = $error->getCode();
             $log = "Caught unexpected $class: $message ($code)";
             throw new RuntimeConfigError($log, 0, $error);
+        }
+        
+        if ($result !== $fallback) {
+        	$result = BuiltinRecordUtil::normalizeItem($result);
         }
 
         return $result;

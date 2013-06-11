@@ -84,11 +84,15 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      */
     public function getTestData()
     {
-        return array(
-            "" => "#EMPTY#", "null" => null, true => "TRUE",
-            "alpha" => "ALPHA", "beta" => "BETA", "123" => 123,
-            "float" => -12.3, "a/b/c" => "A/B/C", "x.y.z" => "X/Y/Z",
+        $data = array(
+			'data0' => array(),
+			'data1' => array("foo" => "bar", "baz" => array()),
+			'data2' => array("foo" => array("bar", "baz")),
+			'data3' => array("foo" => null),
+			'data4' => array("foo" => array("bar" => array("baz" => null))),
         );
+
+        return $data;
     }
 
     /**
@@ -208,7 +212,7 @@ abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
      *
      *  @param  \Lousson\Config\AnyConfig   $config The config instance
      *  @param  string                      $key    The config key
-     *  @param  mixed                       $value  The config value
+     *  @param  mixed                        $value  The config value
      *
      *  @throws PHPUnit_Framework_AssertionFailedError
      *          Raised in case hasOption() does not return TRUE or

@@ -4,3 +4,6 @@ dist
 nbproject
 review
 vendor
+.buildpath
+.project
+.settings

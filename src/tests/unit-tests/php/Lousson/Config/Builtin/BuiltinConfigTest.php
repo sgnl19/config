@@ -41,6 +41,8 @@
  *  @filesource
  */
 namespace Lousson\Config\Builtin;
+use Lousson\Config\Error\InvalidConfigError;
+use Exception;
 
 /** Dependencies: */
 use Lousson\Config\AbstractConfigTest;
@@ -71,7 +73,7 @@ class BuiltinConfigTest extends AbstractConfigTest
      */
     public function getConfig(array $options)
     {
-        $config = new BuiltinConfig();
+        $config = new BuiltinConfig($options);
 
         foreach ($options as $key => $value) {
             $config->setOption($key, $value);
