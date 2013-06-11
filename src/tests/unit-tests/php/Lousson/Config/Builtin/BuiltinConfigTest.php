@@ -54,7 +54,7 @@ use Lousson\Config\Builtin\BuiltinConfig;
  *  The BuiltinConfigTest is a test case for the BuiltinConfig class,
  *  implemented on top of the AbstractConfigTest.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
 class BuiltinConfigTest extends AbstractConfigTest

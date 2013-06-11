@@ -54,7 +54,7 @@ use RuntimeException;
  *  and is used by the builtin classes whenever an internal error is
  *  encountered.
  *
- *  @since      lousson/config-0.3.0
+ *  @since      lousson/Lousson_Config-0.3.0
  *  @package    org.lousson.config
  */
 class RuntimeConfigError

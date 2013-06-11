@@ -54,7 +54,7 @@ use Exception;
  *  The GenericConfigTest is a test case for the GenericConfig class,
  *  implemented on top of the AbstractConfigTest.
  *
- *  @since      lousson/config-0.2.0
+ *  @since      lousson/Lousson_Config-0.2.0
  *  @package    org.lousson.config
  */
 class GenericConfigTest extends AbstractConfigTest

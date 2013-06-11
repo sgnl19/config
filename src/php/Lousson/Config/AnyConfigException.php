@@ -49,7 +49,7 @@ namespace Lousson\Config;
  *  raised by instances of the interfaces declared in the Lousson\Config
  *  namespace.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
 interface AnyConfigException

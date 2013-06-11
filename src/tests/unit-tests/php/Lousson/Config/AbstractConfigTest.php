@@ -53,7 +53,7 @@ use PHPUnit_Framework_TestCase;
  *  The AbstractConfigTest class is a basement for testing implementations
  *  of the AnyConfig interface.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
 abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase

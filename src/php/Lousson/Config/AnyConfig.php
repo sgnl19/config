@@ -49,7 +49,7 @@ namespace Lousson\Config;
  *  The AnyConfig interface declares an interface for classes that provide
  *  configuration options.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
 interface AnyConfig
