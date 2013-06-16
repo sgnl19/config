@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Generic\GenericConfigTest class definition
+ *  Lousson\Config\Callback\CallbackConfigTest class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -40,24 +40,24 @@
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config\Generic;
+namespace Lousson\Config\Callback;
 
 /** Dependencies: */
-use Lousson\Config\AbstractConfigTest;
-use Lousson\Config\Generic\GenericConfig;
+use Lousson\Config\Generic\GenericConfigTest;
+use Lousson\Config\Callback\CallbackConfig;
 use Lousson\Config\Error\InvalidConfigError;
 use Exception;
 
 /**
- *  Test case for the GenericConfig implementation
+ *  Test case for the CallbackConfig implementation
  *
- *  The GenericConfigTest is a test case for the GenericConfig class,
+ *  The CallbackConfigTest is a test case for the CallbackConfig class,
  *  implemented on top of the AbstractConfigTest.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
  */
-class GenericConfigTest extends AbstractConfigTest
+class CallbackConfigTest extends GenericConfigTest
 {
     /**
      *  Obtain the config to test
@@ -88,7 +88,7 @@ class GenericConfigTest extends AbstractConfigTest
             throw new InvalidConfigError($message);
         };
 
-        $config = new GenericConfig($callback);
+        $config = new CallbackConfig($callback);
         return $config;
     }
 
@@ -136,7 +136,7 @@ class GenericConfigTest extends AbstractConfigTest
             throw new Exception("TEST!");
         };
 
-        $config = new GenericConfig($callback);
+        $config = new CallbackConfig($callback);
         $config->getOption("foobar");
     }
 }

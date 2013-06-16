@@ -41,12 +41,12 @@
  *  @filesource
  */
 namespace Lousson\Config\Builtin;
-use Lousson\Config\Error\InvalidConfigError;
-use Exception;
 
 /** Dependencies: */
-use Lousson\Config\AbstractConfigTest;
+use Exception;
 use Lousson\Config\Builtin\BuiltinConfig;
+use Lousson\Config\Error\InvalidConfigError;
+use Lousson\Config\Generic\GenericConfigTest;
 
 /**
  *  Test case for the BuiltinConfig implementation
@@ -57,7 +57,7 @@ use Lousson\Config\Builtin\BuiltinConfig;
  *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
  */
-class BuiltinConfigTest extends AbstractConfigTest
+class BuiltinConfigTest extends GenericConfigTest
 {
     /**
      *  Obtain the config to test
