@@ -58,7 +58,7 @@ use Exception;
  *  The CallbackConfig class is a flexible implementation of the AnyConfig
  *  interface, using a Closure to retrieve configuration values.
  *
- *  @since      lousson/config-0.2.0
+ *  @since      lousson/Lousson_Config-0.2.0
  *  @package    org.lousson.config
  */
 class CallbackConfig extends GenericConfig

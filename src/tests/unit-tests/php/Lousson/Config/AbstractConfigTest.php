@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\GenericConfigTest class definition
+ *  Lousson\Config\AbstractConfigTest class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -41,22 +41,22 @@
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config\Generic;
+namespace Lousson\Config;
 
 /** Dependencies: */
 use Lousson\Config\AnyConfig;
 use PHPUnit_Framework_TestCase;
 
 /**
- *  Generic test case for AnyConfig implementation
+ *  Abstract test case for AnyConfig implementation
  *
- *  The GenericConfigTest class is a basement for testing implementations
+ *  The AbstractConfigTest class is a basement for testing implementations
  *  of the AnyConfig interface.
  *
- *  @since      lousson/Lousson_Config-0.2.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
-abstract class GenericConfigTest extends PHPUnit_Framework_TestCase
+abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
      *  Obtain the config to test

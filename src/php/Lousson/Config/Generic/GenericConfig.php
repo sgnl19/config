@@ -54,7 +54,7 @@ use Exception;
  *  of the AnyConfig interface. It attempts to fulfill the interface as far
  *  as possible, without assuming too many implementation details.
  *
- *  @since      lousson/config-0.2.0
+ *  @since      lousson/Lousson_Config-0.2.0
  *  @package    org.lousson.config
  */
 abstract class GenericConfig implements AnyConfig

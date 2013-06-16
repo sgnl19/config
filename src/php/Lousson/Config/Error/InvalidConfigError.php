@@ -54,7 +54,7 @@ use InvalidArgumentException;
  *  and is used by the builtin classes whenever an attempt to retrieve
  *  a nonexistent option is encountered.
  *
- *  @since      lousson/config-0.3.0
+ *  @since      lousson/Lousson_Config-0.3.0
  *  @package    org.lousson.config
  */
 class InvalidConfigError

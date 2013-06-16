@@ -57,7 +57,7 @@ use Lousson\Record\Error\InvalidRecordError;
  *  interface. It allows the definition of any configuration directive at
  *  runtime.
  *
- *  @since      lousson/config-0.1.0
+ *  @since      lousson/Lousson_Config-0.1.0
  *  @package    org.lousson.config
  */
 class BuiltinConfig implements AnyConfig
