@@ -32,32 +32,31 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Generic\GenericConfigTest class definition
+ *  Lousson\Config\AbstractConfigTest class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
  *  @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ *  @author     Attila Levai <alevai at quirkies.org>
  *  @author     Mathias J. Hennig <mhennig at quirkies.org>
  *  @filesource
  */
-namespace Lousson\Config\Generic;
+namespace Lousson\Config;
 
 /** Dependencies: */
-use Lousson\Config\AbstractConfigTest;
-use Lousson\Config\Generic\GenericConfig;
-use Lousson\Config\Error\InvalidConfigError;
-use Exception;
+use Lousson\Config\AnyConfig;
+use PHPUnit_Framework_TestCase;
 
 /**
- *  Test case for the GenericConfig implementation
+ *  Abstract test case for AnyConfig implementation
  *
- *  The GenericConfigTest is a test case for the GenericConfig class,
- *  implemented on top of the AbstractConfigTest.
+ *  The AbstractConfigTest class is a basement for testing implementations
+ *  of the AnyConfig interface.
  *
- *  @since      lousson/config-0.2.0
+ *  @since      lousson/config-0.1.0
  *  @package    org.lousson.config
  */
-class GenericConfigTest extends AbstractConfigTest
+abstract class AbstractConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
      *  Obtain the config to test
@@ -71,73 +70,309 @@ class GenericConfigTest extends AbstractConfigTest
      *  @return \Lousson\Config\AnyConfig
      *          A config instance is returned on success
      */
-    public function getConfig(array $options)
+    abstract function getConfig(array $options);
+
+    /**
+     *  Obtain key/value pairs for testing
+     *
+     *  The getTestData() method returns an associative array of key/value
+     *  pairs of different types. This is used e.g. within data providers,
+     *  to pre-set configuration options to test.
+     *
+     *  @return array
+     *          An array of scalar key/value pairs is returned on success
+     */
+    public function getTestData()
     {
-        $callback = function($name, $fallback = null) use($options)
-        {
-            if (isset($options[$name]) ||
-                    array_key_exists($name, $options)) {
-                return $options[$name];
-            }
+        $data = array(
+			'data0' => array(),
+			'data1' => array("foo" => "bar", "baz" => array()),
+			'data2' => array("foo" => array("bar", "baz")),
+			'data3' => array("foo" => null),
+			'data4' => array("foo" => array("bar" => array("baz" => null))),
+        );
 
-            if (1 < func_num_args()) {
-                return $fallback;
-            }
-
-            $message = "Missing configuration directive: $name";
-            throw new InvalidConfigError($message);
-        };
-
-        $config = new GenericConfig($callback);
-        return $config;
+        return $data;
     }
 
     /**
-     *  Test error handling of hasOption()
+     *  Provide configuration objects to test
      *
-     *  The testGetOptionError() method verifies that the hasOption()
-     *  method does not violate the AnyConfig interface even in case the
-     *  getOption() method raises an unrecognized exception.
+     *  The provideTestConfig() method is a data-provider that will return
+     *  an array of zero or more items, each of whose is an array itself.
+     *  The "inner" arrays' first item is an instance of the configuration
+     *  class to test, whilst the latter item is an associative array of
+     *  key/value pairs representing the configuration directives stored
+     *  in the object.
      *
-     *  @expectedException  PHPUnit_Framework_Error_Warning
+     *  @return array
+     *          An array of test parameters is returned on success
+     */
+    public function provideTestConfig()
+    {
+        $data = $this->getTestData();
+        $config = $this->getConfig($data);
+
+        return array(array($config, $data));
+    }
+
+    /**
+     *  Provide configuration data to test
+     *
+     *  The provideTestData() method is a data-provider that will
+     *  return an array of zero or more items, each of whose will be an
+     *  array itself.
+     *  The "inner" arrays' first item is meant as a key or configuration
+     *  directive, whilst the latter is meant as the associated value.
+     *  This is used to e.g. test setters of configuration implementations,
+     *  if any.
+     *
+     *  @return array
+     *          An array of test parameters is returned on success
+     */
+    public function provideTestData()
+    {
+        $data = $this->getTestData();
+        $testData = array();
+
+        foreach ($data as $key => $value) {
+            $testData[] = array($key, $value);
+        }
+
+        return $testData;
+    }
+
+    /**
+     *  Provide configuration parameter to test
+     *
+     *  The provideTestParameter() method is a data-provider that will
+     *  return an array of zero or more items, each of whose will be an
+     *  array itself.
+     *  The "inner" arrays' first item is the configuration object to be
+     *  tested, the second is a key and the third a value. Those key/value
+     *  pairs are assumed to exist as directive within the configuration
+     *  instance.
+     *
+     *  @return array
+     *          An array of test parameters is returned on success
+     */
+    public function provideTestParameter()
+    {
+        $configList = $this->provideTestConfig();
+        $testData = array();
+
+        foreach ($configList as $configPair) {
+
+            assert('$configPair[0] instanceof Lousson\\Config\\AnyConfig');
+            assert('is_array($configPair[1])');
+
+            foreach ($configPair[1] as $key => $value) {
+                $testData[] = array($configPair[0], $key, $value);
+            }
+        }
+
+        return $testData;
+    }
+
+    /**
+     *  Test getOption() with expected key/value pairs
+     *
+     *  The testGetExpected() method tests whether the $config's
+     *  getOption() method returns the expected $value when invoked
+     *  for the given $key.
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  string                      $key    The config key
+     *  @param  mixed                       $value  The config value
+     *
+     *  @dataProvider       provideTestParameter
      *  @test
      *
-     *  @throws \PHPUnit_Framework_Error_Warning
-     *          Raised in case the test is successful
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case getOption() does not return $value
      */
-    public function testHasOptionError()
+    public function testGetExpected(AnyConfig $config, $key, $value)
     {
-        $class = "Lousson\\Config\\AbstractConfig";
-        $mock = $this->getMockForAbstractClass($class);
+        $message = sprintf(
+            "%s::getOption(%s) is expected to return %s",
+            get_class($config), var_export($key, true),
+            is_object($value)? get_class($value): gettype($value)
+        );
 
-        $mock->expects($this->any())
-            ->method("getOption")
-            ->will($this->throwException(new Exception));
-
-        $mock->hasOption("foobar");
+        $this->assertEquals($value, $config->getOption($key), $message);
     }
 
     /**
-     *  Test error handling of getOption()
+     *  Test hasOption() with expected key/value pairs
      *
-     *  The testGetOptionError() method verifies that the getOption()
-     *  method does not violate the AnyConfig interface even in case the
-     *  callback raises an unrecognized exception.
+     *  The testHasExpected() method tests whether the $config's
+     *  hasOption() method returns TRUE for the given $key and,
+     *  furthermore, whether a subsequent call to getOption() really
+     *  returns the expected $value.
      *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  string                      $key    The config key
+     *  @param  mixed                        $value  The config value
+     *
+     *  @throws PHPUnit_Framework_AssertionFailedError
+     *          Raised in case hasOption() does not return TRUE or
+     *          a subsequent run of getOption() does not return $value
+     *
+     *  @dataProvider       provideTestParameter
+     *  @test
+     */
+    public function testHasExpected(AnyConfig $config, $key, $value)
+    {
+        $message = sprintf(
+            "%s::hasOption(%s) is expected to return TRUE",
+            get_class($config), var_export($key, true)
+        );
+
+        $this->assertTrue($config->hasOption($key), $message);
+        $this->testGetExpected($config, $key, $value);
+    }
+
+    /**
+     *  Test getOption() with unexpected keys
+     *
+     *  The testGetUnexpected() method tests whether the $config's
+     *  getOption() method raises a Lousson\Config\AnyConfigException for
+     *  the given $token.
+     *
+     *  Note that in case $token is NULL, a radom one will get created.
+     *  It is ensured that this token will not be a valid key for any of
+     *  the given $values.
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
+     *
+     *  @dataProvider       provideTestConfig
      *  @expectedException  Lousson\Config\AnyConfigException
      *  @test
      *
      *  @throws \Lousson\Config\AnyConfigException
-     *          Raised in case the test is successful
+     *          Raised in case of success (this is a test!)
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case the $token is is a key within the $values
      */
-    public function testGetOptionError()
+    public function testGetUnexpected(
+        AnyConfig $config, $values = array(), $token = null)
     {
-        $callback = function($name) {
-            throw new Exception("TEST!");
-        };
+        if (null === $token) {
+            $token = $this->getRandomKey($config, $values);
+        }
 
-        $config = new GenericConfig($callback);
-        $config->getOption("foobar");
+        $this->assertThat(
+            $values, $this->logicalNot($this->contains($token)),
+            "THE \$token SHALL NOT BE CONTAINED IN THE LIST OF \$keys"
+        );
+
+        $config->getOption($token);
+    }
+
+    /**
+     *  Test hasOption() with unexpected keys
+     *
+     *  The testHasUnexpected() method tests whether the $config's
+     *  hasOption() method returns FALSE for the given $token.
+     *  Additionally, the testGetUnexpected() method is invoked afterwards,
+     *  in order to check whether hasOption() is consistent with the
+     *  getOption() method.
+     *
+     *  Note that in case $token is NULL, a radom one will get created.
+     *  It is ensured that this token will not be a valid key for any of
+     *  the given $values.
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
+     *
+     *  @dataProvider       provideTestConfig
+     *  @expectedException  Lousson\Config\AnyConfigException
+     *  @test
+     *
+     *  @throws \Lousson\Config\AnyConfigException
+     *          Raised in case of success (this is a test!)
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case hasOption() does not return FALSE or the
+     *          $token is is a key within the $values
+     */
+    public function testHasUnexpected(
+        AnyConfig $config, $values = array(), $token = null)
+    {
+        if (null === $token) {
+            $token = $this->getRandomKey($config, $values);
+        }
+
+        $message = sprintf(
+            "%s::hasOption(%s) is expected to return FALSE",
+            get_class($config), var_export($token, true)
+        );
+
+        $this->assertFalse($config->hasOption($token), $message);
+        $this->testGetUnexpected($config, $values, $token);
+    }
+
+    /**
+     *  Test getOption() with fallback values
+     *
+     *  The testFallback() method tests whether the given $config's
+     *  getOption() method returns a generic fallback value when neither
+     *  of the given $values is used.
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values The config values
+     *  @param  string                      $token  The test token
+     *
+     *  @dataProvider       provideTestConfig
+     *  @test
+     *
+     *  @throws \PHPUnit_Framework_AssertionFailedError
+     *          Raised in case getOption() does not return the generic
+     *          fallback value
+     */
+    public function testFallback(
+        AnyConfig $config, $values = array(), $token = null)
+    {
+        if (null === $token) {
+            $token = $this->getRandomKey($config, $values);
+        }
+
+        $option = $config->getOption($token, $token);
+        $message = sprintf(
+            "%1\$s::getOption(%2\$s, %2\$s) is expected to return ".
+            "the provided fallback value",
+            get_class($config), var_export($token, true)
+        );
+
+        $this->assertEquals($token, $option, $message);
+    }
+
+    /**
+     *  Obtain a pseudo-random token
+     *
+     *  The getRandomKey() method is used internally to generate a
+     *  character sequence that is not a key within the given list of
+     *  $values and assumed to be no valid $config option.
+     *
+     *  @param  \Lousson\Config\AnyConfig   $config The config instance
+     *  @param  array                       $values Known config values
+     *
+     *  @return string
+     *          A nonexistent configuration key is returned on success
+     */
+    private function getRandomKey(AnyConfig $config, $values = array())
+    {
+        $token = sha1("this-key-should-not-exist");
+
+        while (array_key_exists($token, $values)) {
+            $token = sha1($token . microtime());
+        }
+
+        return $token;
     }
 }
 

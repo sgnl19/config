@@ -32,7 +32,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- *  Lousson\Config\Generic\GenericConfig class definition
+ *  Lousson\Config\GenericConfig class definition
  *
  *  @package    org.lousson.config
  *  @copyright  (c) 2012 - 2013, The Lousson Project
@@ -43,93 +43,60 @@
 namespace Lousson\Config\Generic;
 
 /** Dependencies: */
-use Lousson\Record\Builtin\BuiltinRecordUtil;
-
+use Lousson\Config\AnyConfig;
 use Lousson\Config\AnyConfigException;
-use Lousson\Config\AbstractConfig;
-use Lousson\Config\Error\RuntimeConfigError;
-use Lousson\Record\Builtin;
-use Closure;
 use Exception;
 
 /**
- *  A Closure-based implementation of the AnyConfig interface
+ *  An abstract implementation of the AnyConfig interface
  *
- *  The GenericConfig class is a flexible implementation of the AnyConfig
- *  interface, using a Closure to retrieve configuration values.
+ *  The GenericConfig class may be used as base class for implementations
+ *  of the AnyConfig interface. It attempts to fulfill the interface as far
+ *  as possible, without assuming too many implementation details.
  *
  *  @since      lousson/config-0.2.0
  *  @package    org.lousson.config
  */
-class GenericConfig extends AbstractConfig
+abstract class GenericConfig implements AnyConfig
 {
     /**
-     *  Create a config instance
+     *  Check whether a particular option exists
      *
-     *  The constructor allows to pass a Closure $getter that is used to
-     *  retrieve configuration values. This callback must provide the exact
-     *  same interface as the getOption() method, otherwise the behavior
-     *  is undefined.
+     *  The hasOption() method will return TRUE in case a subsequent call
+     *  to getOption() would succeed, when the same $name but no $fallback
+     *  is provided. FALSE will be returned otherwise.
      *
-     *  @param  \Closure    $getter     The configuration callback
+     *  Note that the default implementation actually attempts to retrieve
+     *  the configuration option. Thus; authors of derived classes should
+     *  provide their own implementation of the hasOption() method, in
+     *  order to increase the overall performance.
+     *
+     *  @param  string      $name       The name of the option to check
+     *
+     *  @return boolean
+     *          TRUE is returned if the option exists, FALSE otherwise
      */
-    public function __construct(Closure $getter)
+    public function hasOption($name)
     {
-        $this->getter = $getter;
-    }
+        $result = false;
 
-    /**
-     *  Obtain the value of a particular option
-     *
-     *  The getOption() method will return the value associated with the
-     *  option identified by the given $name. If there is no such option,
-     *  it will either return the $fallback value - if provided -, or
-     *  raise an exception implementing the AnyConfigException interface.
-     *
-     *  @param  string      $name       The name of the option to retrieve
-     *  @param  mixed       $fallback   The fallback value, if any
-     *
-     *  @return mixed
-     *          The value of the option is returned on success
-     *
-     *  @throws \Lousson\Config\AnyConfigException
-     *          Raised in case of any error
-     *
-     *  @link http://php.net/manual/en/function.func-num-args.php
-     *  @link http://php.net/manual/en/language.functions.php
-     */
-    public function getOption($name, $fallback = null)
-    {
         try {
-            $getter = $this->getter;
-            $result = 1 === func_num_args()
-                ? $getter($name)
-                : $getter($name, $fallback);
+            $this->getOption($name);
+            $result = true;
         }
         catch (AnyConfigException $error) {
-            /* Nothing to do; allowed by the AnyConfig interface */
-            throw $error;
+            /* Nothing to do; this should be perfectly fine */
         }
         catch (Exception $error) {
             $class = get_class($error);
             $message = $error->getMessage();
             $code = $error->getCode();
-            $log = "Caught unexpected $class: $message ($code)";
-            throw new RuntimeConfigError($log, 0, $error);
-        }
-        
-        if ($result !== $fallback) {
-        	$result = BuiltinRecordUtil::normalizeItem($result);
+            $trace = $error->getTraceAsString();
+            $log = "Caught unexpected $class: $message ($code)\n$trace";
+            trigger_error($log, E_USER_WARNING);
         }
 
         return $result;
     }
-
-    /**
-     *  The configuration getter callback
-     *
-     *  @var array
-     */
-    private $getter;
 }
 
