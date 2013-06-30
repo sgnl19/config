@@ -43,20 +43,18 @@
 namespace Lousson\Config\Callback;
 
 /** Dependencies: */
-use Lousson\Record\Builtin\BuiltinRecordUtil;
-
-use Lousson\Config\AnyConfigException;
 use Lousson\Config\Generic\GenericConfig;
-use Lousson\Config\Error\RuntimeConfigError;
-use Lousson\Record\Builtin;
+use Lousson\Record\Builtin\BuiltinRecordUtil;
 use Closure;
-use Exception;
+
+/** Exceptions: */
+use Lousson\Config\Error\RuntimeConfigError;
 
 /**
  *  A Closure-based implementation of the AnyConfig interface
  *
- *  The CallbackConfig class is a flexible implementation of the AnyConfig
- *  interface, using a Closure to retrieve configuration values.
+ *  The Lousson\Config\Callback\CallbackConfig is a flexible implementation
+ *  of the AnyConfig interface, using a Closure to retrieve config values.
  *
  *  @since      lousson/Lousson_Config-0.2.0
  *  @package    org.lousson.config
@@ -71,7 +69,7 @@ class CallbackConfig extends GenericConfig
      *  same interface as the getOption() method, otherwise the behavior
      *  is undefined.
      *
-     *  @param  \Closure    $getter     The configuration callback
+     *  @param  Closure             $getter         The config callback
      */
     public function __construct(Closure $getter)
     {
@@ -84,10 +82,10 @@ class CallbackConfig extends GenericConfig
      *  The getOption() method will return the value associated with the
      *  option identified by the given $name. If there is no such option,
      *  it will either return the $fallback value - if provided -, or
-     *  raise an exception implementing the AnyConfigException interface.
+     *  raise an exception.
      *
-     *  @param  string      $name       The name of the option to retrieve
-     *  @param  mixed       $fallback   The fallback value, if any
+     *  @param  string              $name           The option name
+     *  @param  mixed               $fallback       The fallback value
      *
      *  @return mixed
      *          The value of the option is returned on success
@@ -95,8 +93,8 @@ class CallbackConfig extends GenericConfig
      *  @throws \Lousson\Config\AnyConfigException
      *          Raised in case of any error
      *
-     *  @link http://php.net/manual/en/function.func-num-args.php
-     *  @link http://php.net/manual/en/language.functions.php
+     *  @link   http://php.net/manual/en/function.func-num-args.php
+     *  @link   http://php.net/manual/en/language.functions.php
      */
     public function getOption($name, $fallback = null)
     {
@@ -105,21 +103,20 @@ class CallbackConfig extends GenericConfig
             $result = 1 === func_num_args()
                 ? $getter($name)
                 : $getter($name, $fallback);
+
+            if ($result !== $fallback) {
+                $result = BuiltinRecordUtil::normalizeItem($result);
+            }
         }
-        catch (AnyConfigException $error) {
+        catch (\Lousson\Config\AnyConfigException $error) {
             /* Nothing to do; allowed by the AnyConfig interface */
             throw $error;
         }
-        catch (Exception $error) {
+        catch (\Exception $error) {
             $class = get_class($error);
-            $message = $error->getMessage();
+            $message = "Could not fetch option: Caught $class";
             $code = $error->getCode();
-            $log = "Caught unexpected $class: $message ($code)";
-            throw new RuntimeConfigError($log, 0, $error);
-        }
-        
-        if ($result !== $fallback) {
-        	$result = BuiltinRecordUtil::normalizeItem($result);
+            throw new RuntimeConfigError($message, $code, $error);
         }
 
         return $result;
@@ -128,7 +125,7 @@ class CallbackConfig extends GenericConfig
     /**
      *  The configuration getter callback
      *
-     *  @var array
+     *  @var \Closure
      */
     private $getter;
 }

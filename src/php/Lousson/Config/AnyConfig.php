@@ -60,10 +60,10 @@ interface AnyConfig
      *  The getOption() method will return the value associated with the
      *  option identified by the given $name. If there is no such option,
      *  it will either return the $fallback value - if provided -, or
-     *  raise an exception implementing the AnyConfigException interface.
+     *  raise an exception.
      *
-     *  @param  string      $name       The name of the option to retrieve
-     *  @param  mixed       $fallback   The fallback value, if any
+     *  @param  string              $name           The option name
+     *  @param  mixed               $fallback       The fallback value
      *
      *  @return mixed
      *          The value of the option is returned on success
@@ -71,8 +71,8 @@ interface AnyConfig
      *  @throws \Lousson\Config\AnyConfigException
      *          Raised in case of any error
      *
-     *  @link http://php.net/manual/en/function.func-num-args.php
-     *  @link http://php.net/manual/en/language.functions.php
+     *  @link   http://php.net/manual/en/function.func-num-args.php
+     *  @link   http://php.net/manual/en/language.functions.php
      */
     public function getOption($name, $fallback = null);
 
