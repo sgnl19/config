@@ -45,8 +45,8 @@ namespace Lousson\Config;
 /**
  *  An interface for config loaders
  *
- *  The AnyConfigLoader interface defines the API that is to be provided
- *  by any configuration loader implementation.
+ *  The Lousson\Config\AnyConfigLoader interface defines an API for dynamic
+ *  loading of configuration data into configuration objects.
  *
  *  @since      lousson/Lousson_Config-0.2.0
  *  @package    org.lousson.config
@@ -56,12 +56,13 @@ interface AnyConfigLoader
     /**
      *  Load configuration
      *
-     *  The loadConfig() method is used to load the configuration that is
-     *  identified by the given $uri. The optional $type parameter can get
-     *  used to specifiy the internet-media-type of the resource.
+     *  The loadConfig() method is used to load the configuration at the
+     *  given $location into a configuration object. The optional $type
+     *  parameter can be used to specify the (internet-) media type of the
+     *  resource.
      *
-     *  @param  string              $uri        The resource identifier
-     *  @param  string              $type       The media type, if known
+     *  @param  string              $location       The config location
+     *  @param  string              $type           The config type
      *
      *  @return \Lousson\Config\AnyConfig
      *          A config instance is returned on success
@@ -69,6 +70,6 @@ interface AnyConfigLoader
      *  @throws \Lousson\Config\AnyConfigException
      *          Raised in case loading the configuration has failed
      */
-    public function loadConfig($uri, $type = null);
+    public function loadConfig($location, $type = null);
 }
 
